@@ -277,8 +277,8 @@ form.sign-in-form {
   }
   .signin-signup {
     width: 100%;
-    top: 95%;
-    transform: translate(-50%, -100%);
+    top: 50%;
+    transform: translate(-50%, -30%);
     transition: 1s 0.8s ease-in-out;
   }
 
