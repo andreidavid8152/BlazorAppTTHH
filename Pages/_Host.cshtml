@@ -31,5 +31,12 @@
     </div>
 
     <script src="_framework/blazor.server.js"></script>
+
+    <script>
+        window.saveUserData = (data) => {
+            sessionStorage.setItem('userData', JSON.stringify(data));
+        };
+    </script>
+
 </body>
 </html>

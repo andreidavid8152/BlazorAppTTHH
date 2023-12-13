@@ -1,50 +1,53 @@
 ﻿@page "/"
-@using BlazorAppTTHH.Models;
-@using BlazorAppTTHH.Services;
+@using BlazorAppTTHH.Models
+@using BlazorAppTTHH.Services
 @inject APITTHH _api
-
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
 
 <div class="container">
     <div class="forms-container">
         <div class="signin-signup">
-            <form action="#" class="sign-in-form">
-                <h2 class="title">Inicio de sesion</h2>
+            <form class="sign-in-form" @onsubmit="HandleLogin">
+                <h2 class="title">Inicio de sesión</h2>
                 <div class="input-field">
                     <i class="fas fa-user"></i>
-                    <input type="text" placeholder="Usuario" />
+                    <input type="text" placeholder="Usuario" @bind="loginModel.Usuario" />
                 </div>
                 <div class="input-field">
                     <i class="fas fa-lock"></i>
-                    <input type="password" placeholder="Contraseña" />
+                    <input type="password" placeholder="Contraseña" @bind="loginModel.Password" />
                 </div>
                 <div class="input-field">
                     <i class="fas fa-chevron-down arrow-icon"></i>
-                    <select id="opciones" name="opciones">
-
+                    <select @bind="selectedEmisor">
                         <option value="" disabled selected hidden>Seleccione una opción</option>
-
                         @if (emisores != null)
                         {
-                            @foreach(var emisor in emisores)
+                            @foreach (var emisor in emisores)
                             {
-                                <option value="@emisor.Codigo">@emisor.Codigo - @emisor.NombreEmisor</option>
+                                <option value="@emisor.Codigo">@emisor.NombreEmisor</option>
                             }
                         }
                         else
                         {
                             <option>Cargando datos...</option>
                         }
-
                     </select>
                 </div>
 
+                @if (!string.IsNullOrEmpty(errorMessage))
+                {
+                    <div class="error-message">
+                        @errorMessage
+                    </div>
+                }
+
+
                 <input type="submit" value="Ingresar" class="btn solid" />
-                <div class="social-media">
-                </div>
             </form>
         </div>
     </div>
-
     <div class="panels-container">
         <div class="panel left-panel">
             <h1>Grupo 1</h1>
@@ -54,12 +57,48 @@
 </div>
 
 @code {
+    private LoginModel loginModel = new LoginModel();
     private List<Emisor> emisores;
+    private int selectedEmisor;
+    private string errorMessage = "";
 
     protected override async Task OnInitializedAsync()
     {
         emisores = await _api.GetEmisores();
     }
+
+    private async Task HandleLogin()
+    {
+        errorMessage = ""; // Limpiar mensajes de error anteriores
+
+        try
+        {
+            var usuarioResponse = await _api.Login(loginModel);
+
+            if (usuarioResponse != null && usuarioResponse.Observacion == "Ingreso exitoso")
+            {
+                if (usuarioResponse.Emisor == selectedEmisor.ToString())
+                {
+
+                    //Guarda en la variable de sesion saveUserData informacion especifica del usuario. 
+                    await JSRuntime.InvokeVoidAsync("saveUserData", usuarioResponse);
+
+                    // Redireccionar a Dashboard.razor
+                    NavigationManager.NavigateTo("/dashboard");
+                }
+                else
+                {
+                    errorMessage = "El emisor seleccionado no coincide con el usuario.";
+                }
+            }
+            else
+            {
+                errorMessage = "El inicio de sesión no fue exitoso. Por favor, verifique sus credenciales.";
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error durante el inicio de sesión: {ex.Message}";
+        }
+    }
 }
-
-

@@ -1,6 +1,6 @@
 ﻿using BlazorAppTTHH.Models;
 using System.Net.Http.Json;
-
+using System.Web;
 
 namespace BlazorAppTTHH.Services
 {
@@ -28,5 +28,27 @@ namespace BlazorAppTTHH.Services
 
             return emisores;
         }
+
+        public async Task<UsuarioResponse> Login(LoginModel usuarioLogin)
+        {
+            // Preparar la cadena de consulta con los parámetros de usuario y contraseña
+            var query = HttpUtility.ParseQueryString(string.Empty);
+            query["usuario"] = usuarioLogin.Usuario;
+            query["password"] = usuarioLogin.Password;
+            var queryString = query.ToString();
+
+            // Hacer la llamada al endpoint con los parámetros de consulta
+            var response = await _httpClient.GetAsync($"Usuarios?{queryString}");
+            response.EnsureSuccessStatusCode();
+
+            var usuario = await response.Content.ReadFromJsonAsync<UsuarioResponse>();
+            if (usuario == null)
+            {
+                throw new InvalidOperationException("Ocurrió un error.");
+            }
+            return usuario;
+        }
+
+
     }
 }
