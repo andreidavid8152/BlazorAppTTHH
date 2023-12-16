@@ -38,7 +38,7 @@
 
                 @if (!string.IsNullOrEmpty(errorMessage))
                 {
-                    <div class="error-message">
+                    <div class="error-message" style="color:red">
                         @errorMessage
                     </div>
                 }
@@ -70,6 +70,27 @@
     private async Task HandleLogin()
     {
         errorMessage = ""; // Limpiar mensajes de error anteriores
+
+        // Validar que el usuario no sea nulo o vacío
+        if (string.IsNullOrEmpty(loginModel.Usuario))
+        {
+            errorMessage = "El usuario no debe estar vacío.";
+            return;
+        }
+
+        // Validar que la contraseña no sea nula o vacía
+        if (string.IsNullOrEmpty(loginModel.Password))
+        {
+            errorMessage = "La contraseña no debe estar vacía.";
+            return;
+        }
+
+        // Validar que la contraseña tenga exactamente 4 caracteres
+        if (loginModel.Usuario.Length != 4)
+        {
+            errorMessage = "El usuario debe tener exactamente 4 caracteres.";
+            return;
+        }
 
         try
         {
