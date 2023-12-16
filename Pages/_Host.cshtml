@@ -36,6 +36,11 @@
         window.saveUserData = (data) => {
             sessionStorage.setItem('userData', JSON.stringify(data));
         };
+
+        window.getUserData = () => {
+            const data = sessionStorage.getItem('userData');
+            return data ? JSON.parse(data) : null;
+        };
     </script>
 
 </body>
