@@ -1,16 +1,14 @@
 ﻿using BlazorAppTTHH.Models;
 using Newtonsoft.Json;
-using System.Net.Http.Json;
-using System.Text.Json.Serialization;
 using System.Web;
 
-namespace BlazorAppTTHH.Services
+namespace BlazorAppTTHH.Mediator
 {
-    public class APITTHH
+    public class MediatorService : IMediatorService
     {
         private readonly HttpClient _httpClient;
 
-        public APITTHH(IHttpClientFactory clientFactory)
+        public MediatorService(IHttpClientFactory clientFactory)
         {
             _httpClient = clientFactory.CreateClient("ApiService");
         }
@@ -57,7 +55,5 @@ namespace BlazorAppTTHH.Services
             return usuarios.FirstOrDefault();
 
         }
-
-
     }
 }

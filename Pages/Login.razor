@@ -1,7 +1,7 @@
 ﻿@page "/"
 @using BlazorAppTTHH.Models
-@using BlazorAppTTHH.Services
-@inject APITTHH _api
+@using BlazorAppTTHH.Mediator
+@inject IMediatorService _mediator
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JSRuntime
 
@@ -64,7 +64,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        emisores = await _api.GetEmisores();
+        emisores = await _mediator.GetEmisores();
     }
 
     private async Task HandleLogin()
@@ -94,7 +94,7 @@
 
         try
         {
-            var usuarioResponse = await _api.Login(loginModel);
+            var usuarioResponse = await _mediator.Login(loginModel);
 
             if (usuarioResponse != null && usuarioResponse.Observacion == "INGRESO EXITOSO")
             {

@@ -1,4 +1,4 @@
-using BlazorAppTTHH.Services;
+using BlazorAppTTHH.Mediator;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 
@@ -12,7 +12,9 @@ builder.Services.AddHttpClient("ApiService", client =>
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddScoped<APITTHH>();
+
+// Registra tus servicios aquí
+builder.Services.AddScoped<IMediatorService, MediatorService>();
 
 
 var app = builder.Build();
