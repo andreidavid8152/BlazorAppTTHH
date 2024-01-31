@@ -55,5 +55,23 @@ namespace BlazorAppTTHH.Mediator
             return usuarios.FirstOrDefault();
 
         }
+
+        public async Task<List<CentroCosto>> ObtenerCentroCostos()
+        {
+            // Hacemos la llamada al servicio externo
+            var response = await _httpClient.GetAsync("Varios/CentroCostosSelect");
+            response.EnsureSuccessStatusCode();
+
+            // Deserializamos la respuesta a una lista de objetos CentroCosto
+            var centroCostos = await response.Content.ReadFromJsonAsync<List<CentroCosto>>();
+
+            // Verificamos que la respuesta no esté vacía
+            if (centroCostos == null)
+            {
+                throw new InvalidOperationException("No se recibieron datos de los centros de costos.");
+            }
+
+            return centroCostos;
+        }
     }
 }

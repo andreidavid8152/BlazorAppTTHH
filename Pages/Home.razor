@@ -4,17 +4,19 @@
 @inject IJSRuntime JSRuntime
 
 <style>
-
+    body{
+        background-color: #bacde6;
+    }
 </style>
 
-<h1>HOME</h1>
+<h1 class="mt-4 text-4xl font-extrabold leading-none tracking-tight dark:text-black">HOME</h1>
 
 <br />
 
-<h3 style="display:inline">Nombre: </h3>  @nombreUsuario
+<h3 style="display:inline" class="text-xl font-extrabold">Nombre:</h3>  @nombreUsuario
 <br />
 <br />
-<h3 style="display:inline">RUC: </h3>  @rucUsuario
+<h3 style="display:inline" class="text-xl font-extrabold">RUC: </h3>  @rucUsuario
 
 
 @code {

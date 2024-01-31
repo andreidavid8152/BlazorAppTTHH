@@ -1,0 +1,56 @@
+﻿@page "/centrocostos"
+@using BlazorAppTTHH.Mediator
+@using BlazorAppTTHH.Models
+
+@inject IMediatorAPI _mediator
+
+<style>
+    body {
+        background-color: #bacde6;
+    }
+</style>
+
+<h1 class="mb-4 mt-4 text-4xl font-extrabold leading-none tracking-tight dark:text-black">CENTRO DE COSTOS</h1>
+
+<div class="flex justify-center items-center p-4" style="margin-left:500px">
+    <!-- Contenedor centrado con padding -->
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase dark:text-gray-400">
+                <tr>
+                    <th scope="col" class="px-6 py-3 bg-gray-50 dark:bg-gray-800">Código</th>
+                    <th scope="col" class="px-6 py-3 bg-gray-50 dark:bg-gray-800">Nombre del Centro de Costos</th>
+                    <th scope="col" class="px-6 py-3 bg-gray-50 dark:bg-gray-800">Mensaje</th>
+                    <th scope="col" class="px-6 py-3 bg-gray-50 dark:bg-gray-800">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var centroCosto in centroCostos)
+                {
+                    <tr class="border-b border-gray-200 dark:border-gray-700">
+                        <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800">@centroCosto.Codigo</td>
+                        <td class="px-6 py-4 bg-gray-50 dark:bg-gray-800">@centroCosto.NombreCentroCostos</td>
+                        <td class="px-6 py-4 bg-gray-50 dark:bg-gray-800">@centroCosto.Mensaje</td>
+                        <td class="px-6 py-4 bg-gray-50 dark:bg-gray-800">
+                            <a href="/centrocostos/editar" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-xs px-3 py-1 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Editar</a>
+                            <a href="URL_de_Eliminar" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-xs px-3 py-1 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Eliminar</a>
+                        </td>
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+@code {
+    private List<CentroCosto> centroCostos = new List<CentroCosto>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        centroCostos = await _mediator.ObtenerCentroCostos();
+    }
+
+}
