@@ -73,5 +73,21 @@ namespace BlazorAppTTHH.Mediator
 
             return centroCostos;
         }
+
+        public async Task<CentroCosto> InsertarCentroCosto(CentroCosto centroCosto)
+        {
+            // Construye la URL con los parámetros de consulta.
+            var url = $"Varios/CentroCostosInsert?codigocentrocostos={centroCosto.Codigo}&descripcioncentrocostos={Uri.EscapeDataString(centroCosto.NombreCentroCostos)}";
+
+            // Envía una solicitud POST a la URL con un cuerpo de solicitud vacío, ya que los datos se envían en la cadena de consulta.
+            var response = await _httpClient.PostAsync(url, null);
+            response.EnsureSuccessStatusCode();
+
+            // El servidor responde con un arreglo de objetos CentroCosto.
+            var centroCostosRespuesta = await response.Content.ReadFromJsonAsync<List<CentroCosto>>();
+
+            // Suponiendo que el servidor responde con al menos un objeto CentroCosto.
+            return centroCostosRespuesta.FirstOrDefault();
+        }
     }
 }

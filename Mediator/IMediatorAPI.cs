@@ -7,5 +7,6 @@ namespace BlazorAppTTHH.Mediator
         Task<List<Emisor>> GetEmisores();
         Task<UsuarioResponse> Login(LoginModel usuarioLogin);
         Task<List<CentroCosto>> ObtenerCentroCostos();
+        Task<CentroCosto> InsertarCentroCosto(CentroCosto centroCosto);
     }
 }

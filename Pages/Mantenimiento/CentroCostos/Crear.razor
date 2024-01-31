@@ -1,0 +1,56 @@
+﻿@page "/centrocostos/crear"
+@using BlazorAppTTHH.Mediator
+@using BlazorAppTTHH.Models
+
+@inject IMediatorAPI _mediator
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+
+<style>
+    body {
+        background-color: #bacde6;
+    }
+</style>
+
+<h1 class="mb-4 mt-4 text-4xl font-extrabold leading-none tracking-tight dark:text-black">CREAR</h1>
+
+
+<form class="max-w-sm mx-auto" style="margin-left:500px" @onsubmit="HandleSubmit">
+    <div class="mb-5">
+        <label class="block mb-2 text-lg font-medium">Codigo</label>
+        <input @bind="centroCosto.Codigo" type="number" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" placeholder="Ingrese un codigo" required>
+    </div>
+    <div class="mb-5">
+        <label class="block mb-2 text-lg font-medium">Nombre</label>
+        <input @bind="centroCosto.NombreCentroCostos" type="text" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" placeholder="Ingrese un nombre" required>
+    </div>
+    <div class="flex justify-between">
+        <button type="submit" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 mr-6">Guardar</button>
+        <a href="/centrocostos" class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:focus:ring-yellow-900">Volver</a>
+    </div>
+</form>
+
+<br />
+
+
+
+@code {
+    private CentroCosto centroCosto = new CentroCosto();
+
+    private async Task HandleSubmit()
+    {
+        // Aquí llamas al método que hemos creado anteriormente.
+        var mensaje = await _mediator.InsertarCentroCosto(centroCosto);
+
+        if (mensaje.Mensaje == "El registro que desea ingresar ya existe")
+        {
+            // Muestra una alerta de JavaScript.
+            await JSRuntime.InvokeVoidAsync("alert", "El registro que desea ingresar ya existe");
+        }
+        else
+        {
+            // Redirige al usuario a la ruta /centrocostos.
+            NavigationManager.NavigateTo("/centrocostos");
+        }
+    }
+}
