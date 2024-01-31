@@ -2,7 +2,7 @@
 
 namespace BlazorAppTTHH.Mediator
 {
-    public interface IMediatorService
+    public interface IMediatorAPI
     {
         Task<List<Emisor>> GetEmisores();
         Task<UsuarioResponse> Login(LoginModel usuarioLogin);

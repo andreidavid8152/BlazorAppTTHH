@@ -14,7 +14,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 
 // Registra tus servicios aquí
-builder.Services.AddScoped<IMediatorService, MediatorService>();
+builder.Services.AddScoped<IMediatorAPI, MediatorAPI>();
 
 
 var app = builder.Build();

@@ -4,11 +4,11 @@ using System.Web;
 
 namespace BlazorAppTTHH.Mediator
 {
-    public class MediatorService : IMediatorService
+    public class MediatorAPI : IMediatorAPI
     {
         private readonly HttpClient _httpClient;
 
-        public MediatorService(IHttpClientFactory clientFactory)
+        public MediatorAPI(IHttpClientFactory clientFactory)
         {
             _httpClient = clientFactory.CreateClient("ApiService");
         }
