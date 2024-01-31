@@ -1,0 +1,46 @@
+﻿@page "/home"
+@layout MainLayout
+@using BlazorAppTTHH.Models;
+@inject IJSRuntime JSRuntime
+
+<style>
+
+</style>
+
+<h1>HOME</h1>
+
+<br />
+
+<h3 style="display:inline">Nombre: </h3>  @nombreUsuario
+<br />
+<br />
+<h3 style="display:inline">RUC: </h3>  @rucUsuario
+
+
+@code {
+    private string nombreUsuario;
+    private string rucUsuario;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await LoadUserData();
+            StateHasChanged(); // Forzar la actualización del estado del componente
+        }
+    }
+
+    private async Task LoadUserData()
+    {
+        var userData = await JSRuntime.InvokeAsync<UsuarioResponse>("getUserData");
+        if (userData != null)
+        {
+            nombreUsuario = userData.NombreUsuario;
+            rucUsuario = userData.RucUsuario;
+        }
+        else
+        {
+            Console.WriteLine("No se cargaron datos de usuario."); // Manejar el caso de datos no cargados
+        }
+    }
+}

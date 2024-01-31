@@ -2,6 +2,7 @@
 
 @using BlazorAppTTHH.Models
 @using BlazorAppTTHH.Mediator
+@layout LoginLayout
 @inject IMediatorAPI _mediator
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JSRuntime
@@ -105,8 +106,8 @@
                     //Guarda en la variable de sesion saveUserData informacion especifica del usuario. 
                     await JSRuntime.InvokeVoidAsync("saveUserData", usuarioResponse);
 
-                    // Redireccionar a Dashboard.razor
-                    NavigationManager.NavigateTo("/dashboard");
+                    // Redireccionar a Home.razor
+                    NavigationManager.NavigateTo("/home");
                 }
                 else
                 {

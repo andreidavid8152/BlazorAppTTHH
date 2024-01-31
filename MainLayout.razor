@@ -1,3 +1,196 @@
-﻿@inherits LayoutComponentBase
+﻿@using BlazorAppTTHH.Models
+@inherits LayoutComponentBase
+@inject IJSRuntime JSRuntime
 
-<main> @Body </main>
+<style>
+    .navbar-top {
+        background-color: #007bff; /* Color de fondo azul */
+        color: white; /* Texto en blanco */
+        padding: 10px; /* Espaciado interno */
+        text-align: center; /* Centrar el texto */
+        position: relative; /* O se podría omitir si deseas que sea el flujo natural de la página */
+        z-index: 1000; /* Asegurar que el navbar-top se sitúe sobre el sidebar */
+    }
+
+    .footer {
+        background-color: #343a40; /* Color de fondo gris oscuro */
+        color: white; /* Texto en blanco */
+        padding: 10px; /* Espaciado interno */
+        text-align: center; /* Centrar el texto */
+        position: fixed; /* Fijar al fondo de la página */
+        bottom: 0;
+        width: 100%;
+    }
+
+    .sidebar {
+        position: absolute;
+        left: 0;
+        top: 43px; /* Ajustar según la altura del navbar-top incluyendo el padding */
+        width: 250px;
+        height: calc(100vh - 86px); /* Ajustar según la altura del navbar-top */
+        background: #2D665e;
+        transition: .4s ease;
+        z-index: 500; /* Menor que el z-index del navbar-top para que se sitúe debajo */
+    }
+
+    .navigation li {
+        list-style: none;
+        width: 100%;
+        border-bottom: 1px solid rgba(255,255,255,.5);
+    }
+
+    .navigation a {
+        color: black; /* Cambiado para mejorar la visibilidad */
+        display: block;
+        line-height: 3.5;
+        padding: 0 10px;
+        text-decoration: none;
+        transition: .4s ease;
+    }
+
+    .navigation a:hover {
+        background-color: rgba(255,255,255,.1); /* Cambiado para un efecto de hover más sutil */
+    }
+
+    .main-content {
+        transition: .4s ease;
+        position: absolute;
+        padding-top: 70px; /* Altura de tu navbar-top más el padding */
+        padding-bottom: 70px; /* Altura de tu footer más el padding */
+    }
+
+    /* Estilos para el submenu */
+    .submenu {
+        background: #5d946c;
+        font-size: 14px;
+        display: none; /* Ocultar el submenu por defecto */
+        list-style: none; /* Remover estilos de lista */
+        padding-left: 0; /* Remover padding predeterminado */
+        margin: 0; /* Remover márgenes predeterminados */
+    }
+
+        .submenu.expanded {
+            display: block; /* Mostrar submenu cuando se expanda */
+        }
+
+    .menu-item {
+        cursor: pointer; /* Cambiar cursor para indicar que se puede clickear */
+    }
+
+        .menu-item:hover .submenu {
+            display: block; /* Mostrar submenu al pasar el mouse */
+        }
+
+</style>
+
+<!-- Navbar con el nombre del emisor -->
+<nav class="navbar-top">
+    @nombreEmisor
+</nav>
+
+<!-- Contenido del dashboard -->
+<nav class="sidebar">
+    <ul class="navigation">
+
+        <li><a href="">Home</a></li>
+        <li class="menu-item">
+            <a href="javascript:void(0)" @onclick="ToggleMantenimiento">Mantenimiento</a>
+            <ul class="submenu @MantenimientoClass">
+                <li><a href="">Centro de Costos</a></li>
+                <li><a href="">Conceptos de Nómina</a></li>
+                <li><a href="">Categoría Ocupacional</a></li>
+                <li><a href="">Registro Historico Nomina</a></li>
+                <li><a href="">Gestion Cuentas Contable</a></li>
+                <li><a href="">Cambiar Cierre Nomina</a></li>
+                <li><a href="">Nivel Salarial</a></li>
+                <li><a href="">Parametros Personal</a></li>
+                <li><a href="">Ocupaciones</a></li>
+                <li><a href="">Correlativos</a></li>
+            </ul>
+        </li>
+        <li class="menu-item">
+            <a href="javascript:void(0)" @onclick="ToggleSeleccionar">Seleccionar</a>
+            <ul class="submenu @SeleccionarClass">
+                <li><a href="">Movimientos de Planilla</a></li>
+                <li><a href="">Listado Movi Planillas</a></li>
+                <li><a href="">Ingresar Datos del Empleado</a></li>
+                <li><a href="">Genera Rol de Pagos</a></li>
+                <li><a href="">Imprime rol individual</a></li>
+                <li><a href="">Genera Cierre Nomina</a></li>
+                <li><a href="">Modificar Datos Empleado</a></li>
+            </ul>
+        </li>
+    </ul>
+</nav>
+
+<div class="main-content" style="margin-left: 250px; padding: 20px;">
+    <!-- Aquí va el contenido de la página -->
+    <main> @Body </main>
+</div>
+
+
+<!-- Footer con el perfil del usuario -->
+<footer class="footer">
+    @perfilUsuario
+</footer>
+
+
+@code {
+    private string nombreEmisor;
+    private string perfilUsuario;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await LoadUserData();
+            StateHasChanged(); // Forzar la actualización del estado del componente
+        }
+    }
+
+    private async Task LoadUserData()
+    {
+        var userData = await JSRuntime.InvokeAsync<UsuarioResponse>("getUserData");
+        if (userData != null)
+        {
+            nombreEmisor = userData.NombreEmisor;
+            perfilUsuario = userData.Perfil;
+        }
+        else
+        {
+            Console.WriteLine("No se cargaron datos de usuario."); // Manejar el caso de datos no cargados
+        }
+    }
+
+    private string MantenimientoClass = "collapsed";
+
+    private void ToggleMantenimiento()
+    {
+        if (MantenimientoClass == "collapsed")
+        {
+            MantenimientoClass = "expanded";
+            SeleccionarClass = "collapsed"; // Cierra el otro submenú
+        }
+        else
+        {
+            MantenimientoClass = "collapsed";
+        }
+    }
+
+
+    private string SeleccionarClass = "collapsed";
+
+    private void ToggleSeleccionar()
+    {
+        if (SeleccionarClass == "collapsed")
+        {
+            SeleccionarClass = "expanded";
+            MantenimientoClass = "collapsed"; // Cierra el otro submenú
+        }
+        else
+        {
+            SeleccionarClass = "collapsed";
+        }
+    }
+
+}

@@ -11,5 +11,9 @@ namespace BlazorAppTTHH.Models
         public string Perfil { get; set; }
         [JsonPropertyName("NOMBREEMISOR")]
         public string NombreEmisor { get; set; }
+        [JsonPropertyName("NOMBREUSUARIO")]
+        public string NombreUsuario { get; set; }
+        [JsonPropertyName("RucUsuario")]
+        public string RucUsuario { get; set; }
     }
 }
