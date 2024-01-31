@@ -3,6 +3,7 @@
 @using BlazorAppTTHH.Models
 
 @inject IMediatorAPI _mediator
+@inject IJSRuntime JSRuntime
 
 <style>
     body {
@@ -14,10 +15,10 @@
 
 <a href="/centrocostos/crear" class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"> Crear </a>
 
-<div class="flex justify-center items-center p-4 mb-6" style="margin-left:500px">
+<div class="flex justify-center items-center p-4 mb-6" style="margin-left:425px">
     <!-- Contenedor centrado con padding -->
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <table id="centroCostosTable" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase dark:text-gray-400">
                 <tr>
                     <th scope="col" class="px-6 py-3 bg-gray-50 dark:bg-gray-800">Código</th>
@@ -44,7 +45,6 @@
 </div>
 
 
-
 @code {
     private List<CentroCosto> centroCostos = new List<CentroCosto>();
 
@@ -53,4 +53,11 @@
         centroCostos = await _mediator.ObtenerCentroCostos();
     }
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("initCentroCostosTable");
+        }
+    }
 }

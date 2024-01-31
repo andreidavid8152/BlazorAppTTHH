@@ -18,6 +18,12 @@
     <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
 
+    <!-- Datatables -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json"></script>
+
     <component type="typeof(HeadOutlet)" render-mode="ServerPrerendered" />
 </head>
 <body>
@@ -45,6 +51,22 @@
             const data = sessionStorage.getItem('userData');
             return data ? JSON.parse(data) : null;
         };
+
+        function initCentroCostosTable() {
+            setTimeout(function () {
+                $('#centroCostosTable').DataTable({
+                    "pageLength": 25,
+                    "paging": true,
+                    language: {
+                        url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json',
+                    },
+                    "columnDefs": [
+                        { "width": "300px", "targets": 0 } // Establece el ancho de la primera columna a 500px
+                    ]
+                });
+            }, 100); // Espera 100ms antes de inicializar
+        }
+
     </script>
 
 </body>
