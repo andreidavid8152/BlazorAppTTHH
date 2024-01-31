@@ -1,5 +1,6 @@
 ﻿using BlazorAppTTHH.Models;
 using Newtonsoft.Json;
+using System.Linq;
 using System.Web;
 
 namespace BlazorAppTTHH.Mediator
@@ -88,6 +89,31 @@ namespace BlazorAppTTHH.Mediator
 
             // Suponiendo que el servidor responde con al menos un objeto CentroCosto.
             return centroCostosRespuesta.FirstOrDefault();
+        }
+
+        public async Task<CentroCosto> ActualizarCentroCosto(int codigoCentroCostos, string descripcionCentroCostos)
+        {
+            // Preparar la cadena de consulta con los parámetros
+            var query = HttpUtility.ParseQueryString(string.Empty);
+            query["codigocentrocostos"] = codigoCentroCostos.ToString();
+            query["descripcioncentrocostos"] = descripcionCentroCostos;
+            var queryString = query.ToString();
+
+            // Hacer la llamada al endpoint con los parámetros de consulta
+            var response = await _httpClient.GetAsync($"Varios/CentroCostosUpdate?{queryString}");
+            response.EnsureSuccessStatusCode();
+
+            var content = await response.Content.ReadAsStringAsync();
+
+            // Deserializar el contenido de la respuesta en un objeto CentroCosto
+            var centroCosto = JsonConvert.DeserializeObject<List<CentroCosto>>(content);
+
+            if (centroCosto == null)
+            {
+                throw new InvalidOperationException("No se recibieron datos del centro de costos.");
+            }
+
+            return centroCosto.FirstOrDefault();
         }
     }
 }

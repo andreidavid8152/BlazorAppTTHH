@@ -1,4 +1,5 @@
 using BlazorAppTTHH.Mediator;
+using BlazorAppTTHH.Models.Search;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 
@@ -12,6 +13,8 @@ builder.Services.AddHttpClient("ApiService", client =>
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+builder.Services.AddScoped<CentroCostoStateService>();
+
 
 // Registra tus servicios aquí
 builder.Services.AddScoped<IMediatorAPI, MediatorAPI>();
