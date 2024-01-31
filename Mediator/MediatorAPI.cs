@@ -115,5 +115,42 @@ namespace BlazorAppTTHH.Mediator
 
             return centroCosto.FirstOrDefault();
         }
+
+        public async Task<CentroCosto> EliminarCentroCosto(int codigoCentroCostos, string descripcionCentroCostos)
+        {
+            // Preparar la cadena de consulta con los parámetros
+            var query = HttpUtility.ParseQueryString(string.Empty);
+            query["codigocentrocostos"] = codigoCentroCostos.ToString();
+            query["descripcioncentrocostos"] = descripcionCentroCostos;
+            var queryString = query.ToString();
+
+            // Hacer la llamada al endpoint con los parámetros de consulta
+            var response = await _httpClient.GetAsync($"Varios/CentroCostosDelete?{queryString}");
+            response.EnsureSuccessStatusCode();
+
+            var content = await response.Content.ReadAsStringAsync();
+
+            // Deserializar el contenido de la respuesta en un objeto CentroCosto
+            // Asumiendo que el servidor responde con un objeto CentroCosto
+            var centroCosto = JsonConvert.DeserializeObject<CentroCosto>(content);
+            if (centroCosto == null)
+            {
+                throw new InvalidOperationException("No se recibieron datos del centro de costos eliminado.");
+            }
+            return centroCosto;
+        }
+
+        public async Task<List<Trabajador>> ObtenerTrabajadoresPorSucursal(int sucursal)
+        {
+            var response = await _httpClient.GetAsync($"Varios/TrabajadorSelect?sucursal={sucursal}");
+            response.EnsureSuccessStatusCode();
+
+            var trabajadores = await response.Content.ReadFromJsonAsync<List<Trabajador>>();
+            if (trabajadores == null || !trabajadores.Any())
+            {
+                throw new InvalidOperationException("No se recibieron datos de trabajadores.");
+            }
+            return trabajadores;
+        }
     }
 }

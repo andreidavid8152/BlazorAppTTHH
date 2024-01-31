@@ -1,0 +1,68 @@
+﻿@page "/empleados"
+
+@using BlazorAppTTHH.Mediator
+@using BlazorAppTTHH.Models
+
+@inject IMediatorAPI _mediator
+@inject IJSRuntime JSRuntime
+
+<style>
+    body {
+        background-color: #bacde6;
+    }
+</style>
+
+
+<h1 class="mb-6 mt-4 text-4xl font-extrabold leading-none tracking-tight dark:text-black">EMPLEADOS</h1>
+
+
+<div class="flex justify-center items-center p-4 mb-6" style="margin-left:315px">
+    <!-- Contenedor centrado con padding -->
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <table id="empleadosTable" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase dark:text-gray-400">
+                <tr>
+                    <th scope="col" class="px-6 py-3 bg-gray-50 dark:bg-gray-800">ID</th>
+                    <th scope="col" class="px-6 py-3 bg-gray-50 dark:bg-gray-800">Tipo T</th>
+                    <th scope="col" class="px-6 py-3 bg-gray-50 dark:bg-gray-800">Apellido Paterno</th>
+                    <th scope="col" class="px-6 py-3 bg-gray-50 dark:bg-gray-800">Apellido Materno</th>
+                    <th scope="col" class="px-6 py-3 bg-gray-50 dark:bg-gray-800">Nombres</th>
+                    <th scope="col" class="px-6 py-3 bg-gray-50 dark:bg-gray-800">Identificacion</th>
+                    <th scope="col" class="px-6 py-3 bg-gray-50 dark:bg-gray-800">Entidad Bancaria</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var trabajador in trabajadores)
+                {
+                    <tr class="border-b border-gray-200 dark:border-gray-700">
+                        <td class="px-6 py-4 bg-gray-50 dark:bg-gray-800">@trabajador.Id_Trabajador</td>
+                        <td class="px-6 py-4 bg-gray-50 dark:bg-gray-800">@trabajador.Tipo_Trabajador</td>
+                        <td class="px-6 py-4 bg-gray-50 dark:bg-gray-800">@trabajador.Apellido_Paterno</td>
+                        <td class="px-6 py-4 bg-gray-50 dark:bg-gray-800">@trabajador.Apellido_Materno</td>
+                        <td class="px-6 py-4 bg-gray-50 dark:bg-gray-800">@trabajador.Nombres</td>
+                        <td class="px-6 py-4 bg-gray-50 dark:bg-gray-800">@trabajador.Identificacion</td>
+                        <td class="px-6 py-4 bg-gray-50 dark:bg-gray-800">@trabajador.Entidad_Bancaria</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+@code {
+    private List<Trabajador> trabajadores = new List<Trabajador>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        trabajadores = await _mediator.ObtenerTrabajadoresPorSucursal(17); // Asumiendo que 17 es la sucursal de ejemplo
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("initEmpleadosTable");
+        }
+    }
+}

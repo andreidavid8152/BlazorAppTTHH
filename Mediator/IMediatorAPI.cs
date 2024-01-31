@@ -9,6 +9,9 @@ namespace BlazorAppTTHH.Mediator
         Task<List<CentroCosto>> ObtenerCentroCostos();
         Task<CentroCosto> InsertarCentroCosto(CentroCosto centroCosto);
         Task<CentroCosto> ActualizarCentroCosto(int? codigoCentroCostos, string descripcionCentroCostos);
+        Task<CentroCosto> EliminarCentroCosto(int codigoCentroCostos, string descripcionCentroCostos);
+        Task<List<Trabajador>> ObtenerTrabajadoresPorSucursal(int sucursal);
+
 
     }
 }
