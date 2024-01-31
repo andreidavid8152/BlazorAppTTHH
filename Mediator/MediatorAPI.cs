@@ -91,7 +91,7 @@ namespace BlazorAppTTHH.Mediator
             return centroCostosRespuesta.FirstOrDefault();
         }
 
-        public async Task<CentroCosto> ActualizarCentroCosto(int codigoCentroCostos, string descripcionCentroCostos)
+        public async Task<CentroCosto> ActualizarCentroCosto(int? codigoCentroCostos, string descripcionCentroCostos)
         {
             // Preparar la cadena de consulta con los parámetros
             var query = HttpUtility.ParseQueryString(string.Empty);
