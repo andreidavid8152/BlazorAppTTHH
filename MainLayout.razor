@@ -40,7 +40,7 @@
     }
 
     .navigation a {
-        color: black; /* Cambiado para mejorar la visibilidad */
+        color: #d3dede; /* Cambiado para mejorar la visibilidad */
         display: block;
         line-height: 3.5;
         padding: 0 10px;
@@ -69,6 +69,10 @@
         margin: 0; /* Remover márgenes predeterminados */
     }
 
+    .submenu a{
+            color: black;
+    }
+
         .submenu.expanded {
             display: block; /* Mostrar submenu cuando se expanda */
         }
@@ -92,11 +96,11 @@
 <nav class="sidebar">
     <ul class="navigation">
 
-        <li><a href="">Home</a></li>
+        <li><a href="/home">Home</a></li>
         <li class="menu-item">
             <a href="javascript:void(0)" @onclick="ToggleMantenimiento">Mantenimiento</a>
             <ul class="submenu @MantenimientoClass">
-                <li><a href="">Centro de Costos</a></li>
+                <li><a href="/centrocostos">Centro de Costos</a></li>
                 <li><a href="">Conceptos de Nómina</a></li>
                 <li><a href="">Categoría Ocupacional</a></li>
                 <li><a href="">Registro Historico Nomina</a></li>
