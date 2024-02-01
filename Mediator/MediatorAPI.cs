@@ -142,15 +142,26 @@ namespace BlazorAppTTHH.Mediator
 
         public async Task<List<Trabajador>> ObtenerTrabajadoresPorSucursal(int sucursal)
         {
-            var response = await _httpClient.GetAsync($"Varios/TrabajadorSelect?sucursal={sucursal}");
-            response.EnsureSuccessStatusCode();
-
-            var trabajadores = await response.Content.ReadFromJsonAsync<List<Trabajador>>();
-            if (trabajadores == null || !trabajadores.Any())
+            try
             {
-                throw new InvalidOperationException("No se recibieron datos de trabajadores.");
+                var response = await _httpClient.GetAsync($"Varios/TrabajadorSelect?sucursal={sucursal}");
+                response.EnsureSuccessStatusCode(); // Esto lanzará una excepción si el código de estado HTTP indica un error
+
+                var trabajadores = await response.Content.ReadFromJsonAsync<List<Trabajador>>();
+
+                if (trabajadores == null || !trabajadores.Any())
+                {
+                    throw new InvalidOperationException("No se recibieron datos de trabajadores.");
+                }
+
+                return trabajadores;
             }
-            return trabajadores;
+            catch (Exception ex)
+            {
+                // Aquí puedes manejar o registrar el error según sea necesario
+                throw new ApplicationException($"Error al obtener trabajadores de la sucursal {sucursal}: {ex.Message}", ex);
+            }
         }
+
     }
 }

@@ -15,6 +15,13 @@
 
 <h1 class="mb-6 mt-4 text-4xl font-extrabold leading-none tracking-tight dark:text-black">EMPLEADOS</h1>
 
+<form class="max-w-sm mx-auto" style="margin-left:500px" @onsubmit="HandleSubmit">
+    <div class="mb-5">
+        <label class="block mb-2 text-lg font-medium">Sucursal</label>
+        <input @bind="SucursalId" type="number" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" placeholder="Ingrese una sucursal" required>
+    </div>
+    <button type="submit" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 mr-6 ml-2">Buscar</button>
+</form>
 
 <div class="flex justify-center items-center p-4 mb-6" style="margin-left:315px">
     <!-- Contenedor centrado con padding -->
@@ -52,17 +59,19 @@
 
 @code {
     private List<Trabajador> trabajadores = new List<Trabajador>();
+    private int SucursalId;
 
-    protected override async Task OnInitializedAsync()
+    private async Task HandleSubmit()
     {
-        trabajadores = await _mediator.ObtenerTrabajadoresPorSucursal(17); // Asumiendo que 17 es la sucursal de ejemplo
-    }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
+        try
         {
+            trabajadores = await _mediator.ObtenerTrabajadoresPorSucursal(SucursalId); // Asumiendo que 17 es la sucursal de ejemplo
+            // Aquí llamas al método que hemos creado anteriormente.
             await JSRuntime.InvokeVoidAsync("initEmpleadosTable");
+        }
+        catch (Exception ex)
+        {
+            await JSRuntime.InvokeVoidAsync("alert", "No existe esa sucursal"); // Muestra una alerta con el mensaje de error
         }
     }
 }

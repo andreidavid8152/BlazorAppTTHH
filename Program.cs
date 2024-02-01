@@ -1,4 +1,5 @@
 using BlazorAppTTHH.Mediator;
+using BlazorAppTTHH.Models;
 using BlazorAppTTHH.Models.Search;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
