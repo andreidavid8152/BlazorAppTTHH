@@ -163,5 +163,23 @@ namespace BlazorAppTTHH.Mediator
             }
         }
 
+        public async Task<List<MovimientoPlanilla>> ObtenerMovimientosPlanilla()
+        {
+            // Hacemos la llamada al servicio externo
+            var response = await _httpClient.GetAsync("Varios/MovimientoPlanillaSelect");
+            response.EnsureSuccessStatusCode();
+
+            // Deserializamos la respuesta a una lista de objetos MovimientoPlanilla
+            var movimientosPlanilla = await response.Content.ReadFromJsonAsync<List<MovimientoPlanilla>>();
+
+            // Verificamos que la respuesta no esté vacía
+            if (movimientosPlanilla == null)
+            {
+                throw new InvalidOperationException("No se recibieron datos de movimientos de planilla.");
+            }
+
+            return movimientosPlanilla;
+        }
+
     }
 }

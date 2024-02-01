@@ -1,0 +1,64 @@
+﻿@page "/movimientoplanilla"
+
+@using BlazorAppTTHH.Mediator
+@using BlazorAppTTHH.Models
+
+@inject IMediatorAPI _mediator
+@inject IJSRuntime JSRuntime
+
+<style>
+    body {
+        background-color: #bacde6;
+    }
+</style>
+
+
+<h1 class="mb-6 mt-4 text-4xl font-extrabold leading-none tracking-tight dark:text-black">MOVIMIENTO PLANTILLA</h1>
+
+<div class="flex justify-center items-center p-4 mb-6" style="margin-left:315px">
+    <!-- Contenedor centrado con padding -->
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <table id="movPlantillaTable" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase dark:text-gray-400">
+                <tr>
+                    <th scope="col" class="px-6 py-3 bg-gray-50 dark:bg-gray-800">Codigo</th>
+                    <th scope="col" class="px-6 py-3 bg-gray-50 dark:bg-gray-800">Concepto</th>
+                    <th scope="col" class="px-6 py-3 bg-gray-50 dark:bg-gray-800">Prioridad</th>
+                    <th scope="col" class="px-6 py-3 bg-gray-50 dark:bg-gray-800">Tipo_Operacion</th>
+                    <th scope="col" class="px-6 py-3 bg-gray-50 dark:bg-gray-800">Cuenta1</th>
+                    <th scope="col" class="px-6 py-3 bg-gray-50 dark:bg-gray-800">Cuenta2</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var movimiento in movimientoPlantillas)
+                {
+                    <tr>
+                        <td class="px-6 py-4 bg-gray-50 dark:bg-gray-800">@movimiento.CodigoConcepto</td>
+                        <td class="px-6 py-4 bg-gray-50 dark:bg-gray-800">@movimiento.Concepto</td>
+                        <td class="px-6 py-4 bg-gray-50 dark:bg-gray-800">@movimiento.Prioridad</td>
+                        <td class="px-6 py-4 bg-gray-50 dark:bg-gray-800">@movimiento.TipoOperacion</td>
+                        <td class="px-6 py-4 bg-gray-50 dark:bg-gray-800">@movimiento.Cuenta1</td>
+                        <td class="px-6 py-4 bg-gray-50 dark:bg-gray-800">@movimiento.Cuenta2</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@code {
+    private List<MovimientoPlanilla> movimientoPlantillas = new List<MovimientoPlanilla>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        movimientoPlantillas = await _mediator.ObtenerMovimientosPlanilla();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("initMovPlantillaTable");
+        }
+    }
+}
