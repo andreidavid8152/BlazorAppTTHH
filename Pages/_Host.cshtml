@@ -82,6 +82,21 @@
             }, 100); // Espera 100ms antes de inicializar
         }
 
+        function initMovPlantillaTable() {
+            setTimeout(function () {
+                $('#movPlantillaTable').DataTable({
+                    "pageLength": 13,
+                    "paging": true,
+                    language: {
+                        url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json',
+                    },
+                    "columnDefs": [
+                        { "width": "100px", "targets": 0 } // Establece el ancho de la primera columna a 500px
+                    ]
+                });
+            }, 100); // Espera 100ms antes de inicializar
+        }
+
     </script>
 
 </body>
